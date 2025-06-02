@@ -1,8 +1,8 @@
 import google.generativeai as genai
 import os, json
-from dotgit import load_dotenv
+from dotenv import load_dotenv
 
-load_dotenv(".env")
+load_dotenv()
 genai.configure(api_key=os.environ.get("GEMINI_KEY"))
 
 def parse_query_dimensions(question: str) -> str:

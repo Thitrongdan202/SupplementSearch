@@ -518,7 +518,7 @@
         <div class="container">
             <div class="hero-content">
                 <h1>{{ page_title|default:"Hệ Thống Tra Cứu Thuốc" }}</h1>
-                <p>{{ page_subtitle|default:"Tra cứu thông tin chi tiết về thuốc, tác dụng, liều dùng và hướng dẫn sử dụng an toàn." }}</p>
+                <p>{{ page_subtitle|default:"Thực phẩm chức năng không có tác dụng thay thế thuốc chữa bệnh và lưu ý liều lượng khi sử dụng." }}</p>
             </div>
         </div>
     </div>
@@ -530,7 +530,7 @@
                 {% csrf_token %}
                 <div class="search-input-group">
                     <i class="fas fa-search search-icon"></i>
-                    <input type="text" name="q" id="searchInput" class="search-input" placeholder="Nhập tên thuốc, hoạt chất, hoặc bệnh cần điều trị..." value="{{ request.GET.q|default:'' }}" />
+                    <input type="text" name="q" id="searchInput" class="search-input" placeholder="Nhập tên hãng, hoạt chất, hoặc thành phần của thực phẩm chức năng..." value="{{ request.GET.q|default:'' }}" />
                 </div>
                 <button type="submit" class="search-button">
                     <i class="fas fa-search"></i>

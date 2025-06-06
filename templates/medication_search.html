@@ -4,11 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ page_title|default:"Hệ Thống Tra Cứu Thuốc" }}</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <title>{{ page_title|default:"Hệ Thống Tra Cứu Thực Phẩm bổ Sung" }}</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <style>
         :root {
-            --primary: #3b82f6;
+            --primary: #32ee2c;
             --primary-dark: #2563eb;
             --secondary: #f0f9ff;
             --text-dark: #1e293b;
@@ -21,20 +21,20 @@
             --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             --radius: 8px;
         }
-        
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
         }
-        
+
         body {
             background-color: #f8fafc;
             color: var(--text-dark);
             min-height: 100vh;
         }
-        
+
         .navbar {
             background-color: white;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -43,20 +43,19 @@
             top: 0;
             z-index: 100;
         }
-        
+
         .container {
-            width: 100%;
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 1rem;
         }
-        
+
         .navbar .container {
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            justify-content: center;
         }
-        
+
         .logo {
             display: flex;
             align-items: center;
@@ -65,32 +64,32 @@
             font-size: 1.25rem;
             color: var(--primary);
         }
-        
+
         .logo i {
             font-size: 1.5rem;
         }
-        
+
         .nav-links {
             display: flex;
             gap: 2rem;
         }
-        
+
         .nav-link {
             color: var(--text-light);
             text-decoration: none;
             font-weight: 500;
             transition: color 0.2s;
         }
-        
+
         .nav-link:hover {
             color: var(--primary);
         }
-        
+
         .nav-link.active {
             color: var(--primary);
             position: relative;
         }
-        
+
         .nav-link.active::after {
             content: '';
             position: absolute;
@@ -100,31 +99,34 @@
             height: 2px;
             background-color: var(--primary);
         }
-        
+
         .hero {
-            background: linear-gradient(120deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: white;
-            padding: 3rem 0;
-            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;     
+            justify-content: center; 
+            text-align: center;
+            min-height: 300px;
         }
-        
+
+
         .hero-content {
+            text-align: center;
             max-width: 600px;
         }
-        
+
         .hero h1 {
             font-size: 2.5rem;
             margin-bottom: 1rem;
             font-weight: 700;
         }
-        
+
         .hero p {
             font-size: 1.125rem;
             opacity: 0.9;
             margin-bottom: 2rem;
             line-height: 1.6;
         }
-        
+
         .search-section {
             background-color: white;
             border-radius: var(--radius);
@@ -132,26 +134,26 @@
             padding: 2rem;
             margin-bottom: 2rem;
         }
-        
+
         .search-title {
             font-size: 1.25rem;
             font-weight: 600;
             margin-bottom: 1.5rem;
             color: var(--text-dark);
         }
-        
+
         .search-form {
             display: flex;
             flex-wrap: wrap;
             gap: 1rem;
         }
-        
+
         .search-input-group {
             flex: 1;
             min-width: 200px;
             position: relative;
         }
-        
+
         .search-input {
             width: 100%;
             padding: 0.875rem 1rem 0.875rem 3rem;
@@ -160,13 +162,13 @@
             font-size: 1rem;
             transition: all 0.2s;
         }
-        
+
         .search-input:focus {
             outline: none;
             border-color: var(--primary);
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
         }
-        
+
         .search-icon {
             position: absolute;
             left: 1rem;
@@ -174,7 +176,7 @@
             transform: translateY(-50%);
             color: var(--text-light);
         }
-        
+
         .search-button {
             background-color: var(--primary);
             color: white;
@@ -189,28 +191,28 @@
             align-items: center;
             gap: 0.5rem;
         }
-        
+
         .search-button:hover {
             background-color: var(--primary-dark);
         }
-        
+
         .filter-section {
             margin-top: 1.5rem;
         }
-        
+
         .filter-title {
             font-size: 0.875rem;
             font-weight: 600;
             margin-bottom: 0.75rem;
             color: var(--text-light);
         }
-        
+
         .tags {
             display: flex;
             flex-wrap: wrap;
             gap: 0.5rem;
         }
-        
+
         .tag {
             background-color: var(--secondary);
             color: var(--primary);
@@ -224,34 +226,34 @@
             align-items: center;
             gap: 0.25rem;
         }
-        
+
         .tag:hover {
             background-color: #dbeafe;
         }
-        
+
         .tag.active {
             background-color: var(--primary);
             color: white;
             border-color: var(--primary);
         }
-        
+
         .results-section {
             margin-bottom: 2rem;
         }
-        
+
         .section-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 1.5rem;
         }
-        
+
         .results-title {
             font-size: 1.25rem;
             font-weight: 600;
             color: var(--text-dark);
         }
-        
+
         .results-count {
             font-size: 0.875rem;
             color: var(--text-light);
@@ -259,13 +261,13 @@
             padding: 0.25rem 0.75rem;
             border-radius: 1rem;
         }
-        
+
         .results-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 1.5rem;
         }
-        
+
         .medication-card {
             background-color: white;
             border-radius: var(--radius);
@@ -273,12 +275,12 @@
             overflow: hidden;
             transition: transform 0.2s, box-shadow 0.2s;
         }
-        
+
         .medication-card:hover {
             transform: translateY(-4px);
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
-        
+
         .med-header {
             padding: 1.25rem;
             border-bottom: 1px solid var(--gray-100);
@@ -286,7 +288,7 @@
             align-items: center;
             gap: 1rem;
         }
-        
+
         .med-icon {
             width: 3rem;
             height: 3rem;
@@ -298,17 +300,17 @@
             align-items: center;
             overflow: hidden;
         }
-        
+
         .med-icon img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
-        
+
         .med-info {
             overflow: hidden;
         }
-        
+
         .med-name {
             font-weight: 600;
             font-size: 1.125rem;
@@ -318,7 +320,7 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
-        
+
         .med-category {
             color: var(--text-light);
             font-size: 0.875rem;
@@ -326,40 +328,40 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
-        
+
         .med-body {
             padding: 1.25rem;
         }
-        
+
         .med-details {
             display: grid;
             grid-template-columns: 1fr;
             gap: 1rem;
         }
-        
+
         .detail-item {
             display: flex;
             flex-direction: column;
             gap: 0.25rem;
         }
-        
+
         .detail-label {
             color: var(--text-light);
             font-size: 0.75rem;
             text-transform: uppercase;
             letter-spacing: 0.05em;
         }
-        
+
         .detail-value {
             font-size: 0.875rem;
             color: var(--text-dark);
             line-height: 1.4;
         }
-        
+
         .side-effects {
             color: var(--danger);
         }
-        
+
         .med-footer {
             background-color: var(--gray-100);
             padding: 0.75rem 1.25rem;
@@ -367,19 +369,19 @@
             justify-content: space-between;
             align-items: center;
         }
-        
+
         .med-manufacturer {
             font-size: 0.875rem;
             color: var(--text-light);
         }
-        
+
         .pagination {
             display: flex;
             justify-content: center;
             gap: 0.25rem;
             margin-bottom: 2rem;
         }
-        
+
         .page-item {
             display: flex;
             align-items: center;
@@ -392,22 +394,22 @@
             cursor: pointer;
             transition: all 0.2s;
         }
-        
+
         .page-item:hover {
             background-color: var(--gray-100);
         }
-        
+
         .page-item.active {
             background-color: var(--primary);
             color: white;
         }
-        
+
         .footer {
             background-color: white;
             border-top: 1px solid var(--gray-200);
             padding: 2rem 0;
         }
-        
+
         .footer-content {
             display: flex;
             flex-direction: column;
@@ -415,7 +417,7 @@
             text-align: center;
             gap: 1rem;
         }
-        
+
         .footer-logo {
             display: flex;
             align-items: center;
@@ -424,14 +426,14 @@
             font-size: 1.25rem;
             color: var(--primary);
         }
-        
+
         .footer-text {
             color: var(--text-light);
             font-size: 0.875rem;
             max-width: 600px;
             line-height: 1.6;
         }
-        
+
         .disclaimer {
             background-color: #fffbeb;
             border: 1px solid #fef3c7;
@@ -442,58 +444,58 @@
             align-items: center;
             gap: 0.75rem;
         }
-        
+
         .disclaimer-icon {
             color: var(--warning);
             font-size: 1.25rem;
         }
-        
+
         .disclaimer-text {
             font-size: 0.875rem;
             color: #92400e;
             line-height: 1.5;
         }
-        
+
         .no-results {
             text-align: center;
             padding: 3rem 0;
         }
-        
+
         .no-results i {
             font-size: 3rem;
             color: var(--gray-200);
             margin-bottom: 1rem;
         }
-        
+
         .no-results h3 {
             font-size: 1.25rem;
             font-weight: 600;
             margin-bottom: 0.5rem;
         }
-        
+
         .no-results p {
             color: var(--text-light);
             max-width: 400px;
             margin: 0 auto;
         }
-        
+
         @media (max-width: 768px) {
             .nav-links {
                 display: none;
             }
-            
+
             .hero h1 {
                 font-size: 2rem;
             }
-            
+
             .search-form {
                 flex-direction: column;
             }
-            
+
             .search-input-group {
                 width: 100%;
             }
-            
+
             .results-grid {
                 grid-template-columns: 1fr;
             }
@@ -504,16 +506,11 @@
     <nav class="navbar">
         <div class="container">
             <div class="logo">
-                <i class="fas fa-capsules"></i>
+                <i class="bi bi-person-heart"></i>
                 <span>SuppSearching</span>
-            </div>
-            <div class="nav-links">
-                <a href="#" class="nav-link active">Tìm Kiếm</a>
-
-            </div>
         </div>
     </nav>
-    
+
     <div class="hero">
         <div class="container">
             <div class="hero-content">
@@ -522,7 +519,7 @@
             </div>
         </div>
     </div>
-    
+
     <div class="container">
         <div class="search-section">
             <h2 class="search-title">Tìm Kiếm Các Loại Thực Phẩm Bổ Sung</h2>
@@ -537,7 +534,7 @@
                     <span>Tìm Kiếm</span>
                 </button>
             </form>
-            
+
             {% if labels %}
             <div class="filter-section">
                 <div class="filter-title">Lọc Theo Danh Mục</div>
@@ -549,7 +546,7 @@
             </div>
             {% endif %}
         </div>
-        
+
         <div class="results-section">
             <div class="section-header">
                 <h2 class="results-title">Kết Quả Tìm Kiếm</h2>
@@ -557,7 +554,7 @@
                 <div class="results-count">{{ medications|length }} kết quả</div>
                 {% endif %}
             </div>
-            
+
             <div id="resultsContainer" class="results-grid">
                 {% if medications %}
                     {% for med in medications %}
@@ -597,7 +594,7 @@
                 {% endif %}
             </div>
         </div>
-        
+
         {% if medications %}
         <div class="pagination">
             <div class="page-item active">1</div>
@@ -612,7 +609,7 @@
         </div>
         {% endif %}
     </div>
-    
+
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
@@ -628,7 +625,7 @@
             </div>
         </div>
     </footer>
-    
+
     <script>
         // JavaScript to handle tag selection
         document.addEventListener('DOMContentLoaded', function() {

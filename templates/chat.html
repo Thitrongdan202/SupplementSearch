@@ -366,7 +366,7 @@
             async function performSearch() {
                 const query = searchInput.value.trim();
                 if (!query) {
-                    resultsContainer.innerHTML = '<div class="no-results">Hãy nhập tên thuốc hoặc chọn danh mục.</div>';
+                    resultsContainer.innerHTML = '<div class="no-results">Hãy nhập tên sản phẩm mà bạn muốn tìm.</div>';
                     return;
                 }
     
@@ -388,7 +388,7 @@
                 resultsContainer.innerHTML = '';
     
                 if (!medsArray.length) {
-                    resultsContainer.innerHTML = '<div class="no-results">Không tìm thấy thuốc phù hợp</div>';
+                    resultsContainer.innerHTML = '<div class="no-results">Không tìm thấy sản phẩm phù hợp</div>';
                     return;
                 }
     

@@ -1,43 +1,43 @@
-# MedicineSearch
+# MedicineSearch - Tìm Kiếm Thực Phẩm Chức Năng
 
-## Setup Instructions
+## Hướng Dẫn Cài Đặt
 
-1. **Create and Activate Python Environment**
-   - Ensure you have Python 3.13 installed.
-   - Create a virtual environment:
+1. **Tạo và Kích Hoạt Môi Trường Python**
+   - Đảm bảo bạn đã cài đặt Python 3.13.
+   - Tạo môi trường ảo:
      ```
      python3 -m venv venv
      ```
-   - Activate the virtual environment:
-     - On macOS/Linux:
+   - Kích hoạt môi trường ảo:
+     - Trên macOS/Linux:
        ```
        source venv/bin/activate
        ```
-     - On Windows:
+     - Trên Windows:
        ```
        venv\Scripts\activate
        ```
 
-2. **Install Required Libraries**
-   - Install the required libraries using the following command:
+2. **Cài Đặt Các Thư Viện Cần Thiết**
+   - Cài đặt các thư viện cần thiết bằng lệnh sau:
      ```
      pip install -r libs.txt
      ```
 
-3. **Initialize Database and Vectorize Data**
-   - Run the following command to initialize the database and vectorize data:
+3. **Khởi Tạo Cơ Sở Dữ Liệu và Vector Hóa Dữ Liệu**
+   - Chạy lệnh sau để khởi tạo cơ sở dữ liệu và vector hóa dữ liệu:
      ```
      python vectorizer.py
      ```
 
-4. **Run the Project**
-   - Start the FastAPI application with the command:
+4. **Chạy Dự Án**
+   - Khởi động ứng dụng FastAPI bằng lệnh:
      ```
      fastapi dev
      ```
 
-## New Features
+## Tính Năng Mới
 
-- **Recommendation Keywords**
-  - Endpoint: `/recommendations?query=your+search`
-  - Returns a list of suggested keywords extracted from the top matched medicines to help refine your search.
+- **Gợi Ý Từ Khóa**
+  - Endpoint: `/recommendations?query=từ+khóa+tìm+kiếm`
+  - Trả về danh sách các từ khóa gợi ý được trích xuất từ các sản phẩm phù hợp nhất để giúp tinh chỉnh tìm kiếm của bạn.

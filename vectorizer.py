@@ -40,7 +40,7 @@ for idx, row in df.iterrows():
     cursor.execute('''
     INSERT INTO Supplement_Sales_Weekly_Expanded (name, composition, uses, side_effects, image_url, manufacturer, excellent_review, average_review, poor_review, text, embedding)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)               
-    ''', (row['Medicine Name'], row['Composition'], row['Uses'], row['Side_effects'], row['Image URL'], row['Manufacturer'], row['Excellent Review %'], row['Average Review %'], row['Poor Review %'], text, embedding_blob))
+    ''', (row['Supple Name'], row['Composition'], row['Uses'], row['Side_effects'], row['Image URL'], row['Manufacturer'], row['Excellent Review %'], row['Average Review %'], row['Poor Review %'], text, embedding_blob))
 
 conn.commit()
 conn.close()

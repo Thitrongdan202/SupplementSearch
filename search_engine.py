@@ -8,7 +8,7 @@ from gemini_helper import parse_query_dimensions, summarize_results, translate_r
 from collections import Counter
 import re
 
-DB_PATH = './medicine.db'
+DB_PATH = 'Supple.db'
 model = SentenceTransformer('all-MiniLM-L6-v2')
 
 class MedicineSearchEngine:

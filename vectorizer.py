@@ -5,8 +5,8 @@ import sqlite3
 import pickle
 from sentence_transformers import SentenceTransformer
 
-DB_PATH = './medicine.db'
-CSV_PATH = './datasets/Medicine_Details.csv'
+DB_PATH = 'Supple.db'
+CSV_PATH = './datasets/Supplement_Sales_Weekly_Expanded.csv'
 
 model = SentenceTransformer('all-MiniLM-L6-v2')
 
@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS medicines_detail (
 df = pd.read_csv(CSV_PATH)
 
 for idx, row in df.iterrows():
-    text = f"name: {row['Medicine Name']}. composition: {row['Composition']}. uses: {row['Uses']}."
+    text = f"name: {row['Supple Name']}. composition: {row['Composition']}. uses: {row['Uses']}."
     embedding = model.encode(text)
     embedding_blob = pickle.dumps(embedding)
     cursor.execute('''

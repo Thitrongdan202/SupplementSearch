@@ -1,15 +1,16 @@
-# Project: Medicine Search RAG
+# Project: Supplement Search RAG
 # Structure:
 # - vectorizer.py: Load CSV -> Embed -> Save to SQLite
 # - search_engine.py: Query from SQLite -> Search vector
-# - api.py: FastAPI chat API
+# - main.py (api.py): FastAPI chat API
 
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
 
-from search_engine import MedicineSearchEngine
+# Import class đã được đổi tên từ search_engine
+from search_engine import SupplementSearchEngine
 
 app = FastAPI()
 # add cors
@@ -21,30 +22,32 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-search_engine = MedicineSearchEngine()
-templates = Jinja2Templates(directory="templates")
+
+# Khởi tạo search engine với class mới
+search_engine = SupplementSearchEngine()
+templates = Jinja2Templates(directory=".") # Giả sử chat.html cùng thư mục
 
 class QueryRequest(BaseModel):
     question: str
 
-@app.post("/search")
-async def search_medicine(req: QueryRequest):
+# Endpoint này có thể giữ nguyên hoặc đổi tên cho rõ nghĩa
+@app.post("/search_raw")
+async def search_raw(req: QueryRequest):
     results = search_engine.search(req.question)
-    return {"matches": [{"text": text, "score": float(score)} for text, score in results]}
+    return {"matches": results}
 
 @app.get("/", response_class=HTMLResponse)
 async def chat_ui(request: Request):
+    # Trả về file chat.html
     return templates.TemplateResponse("chat.html", {"request": request})
 
-@app.get("/medications", response_class=JSONResponse)
-async def chat_submit(request: Request, query: str):
+# Đổi tên endpoint cho phù hợp với dữ liệu
+@app.get("/supplements", response_class=JSONResponse)
+async def get_supplements(request: Request, query: str):
     data = search_engine.search_with_llm(query)
-    return data
+    return {"supplements": data} # Trả về dưới key 'supplements'
 
 @app.get("/recommendations", response_class=JSONResponse)
 async def recommend_keywords(request: Request, query: str):
     keywords = search_engine.recommend_keywords(query)
     return {"keywords": keywords}
-
-# Run server with:
-# uvicorn api:app --reload

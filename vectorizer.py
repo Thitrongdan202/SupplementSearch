@@ -4,20 +4,22 @@ import pickle
 from sentence_transformers import SentenceTransformer
 import os
 
-# --- Cấu hình ---
+# --- Cấu hình ---\
 # Đường dẫn tới file cơ sở dữ liệu SQLite sẽ được tạo
 DB_PATH = 'supplements.db'
 # Đường dẫn tới file CSV chứa dữ liệu đầu vào
 CSV_PATH = 'Supplement_Sales_Weekly_Expanded.csv'
 # Tên mô hình Sentence Transformer
 MODEL_NAME = 'all-MiniLM-L6-v2'
+# Tên bảng trong cơ sở dữ liệu
+TABLE_NAME = 'supplements'
 
-# --- Xóa file DB cũ nếu tồn tại để đảm bảo dữ liệu mới hoàn toàn ---
+# --- Xóa file DB cũ nếu tồn tại để đảm bảo dữ liệu mới hoàn toàn ---\
 if os.path.exists(DB_PATH):
     os.remove(DB_PATH)
     print(f"Removed old database file: {DB_PATH}")
 
-# --- Khởi tạo mô hình và kết nối CSDL ---
+# --- Khởi tạo mô hình và kết nối CSDL ---\
 try:
     print(f"Loading model '{MODEL_NAME}'...")
     model = SentenceTransformer(MODEL_NAME)
@@ -31,12 +33,12 @@ except Exception as e:
     print(f"An error occurred during initialization: {e}")
     exit()
 
-# --- Tạo bảng trong cơ sở dữ liệu ---
+# --- Tạo bảng trong cơ sở dữ liệu ---\
 try:
-    print("Creating 'supplements' table...")
+    print(f"Creating '{TABLE_NAME}' table...")
     # Tạo bảng với các cột tương ứng với file CSV và thêm cột cho text và embedding
-    cursor.execute('''
-    CREATE TABLE IF NOT EXISTS supplements (
+    cursor.execute(f'''
+    CREATE TABLE IF NOT EXISTS {TABLE_NAME} (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         product_name TEXT,
         category TEXT,
@@ -47,26 +49,27 @@ try:
         embedding BLOB
     )
     ''')
-    print("Table 'supplements' created successfully.")
+    print("Table created successfully.")
+
 except Exception as e:
     print(f"An error occurred while creating the table: {e}")
     conn.close()
     exit()
 
-# --- Đọc và xử lý dữ liệu từ CSV ---
+# --- Đọc và xử lý dữ liệu từ CSV ---\
 try:
     print(f"Reading data from '{CSV_PATH}'...")
     df = pd.read_csv(CSV_PATH)
     print("CSV data loaded successfully.")
 
-    # Vòng lặp qua từng dòng của DataFrame để xử lý và chèn vào CSDL
-    print("Processing rows and inserting into database...")
+    print("\nProcessing data and inserting into the database...")
+    # Lặp qua từng dòng trong DataFrame
     for index, row in df.iterrows():
         # Kết hợp các cột văn bản để tạo ngữ cảnh tốt hơn cho embedding
         combined_text = (
             f"Product: {row['Product Name']}. "
             f"Category: {row['Category']}. "
-            f"Benefit: {row['Primary Benefit']}."
+            f"Benefit: {row['Primary Benefit']}. "
         )
 
         # Tạo vector embedding
@@ -76,8 +79,8 @@ try:
         embedding_blob = pickle.dumps(embedding)
 
         # Chèn dữ liệu vào bảng
-        cursor.execute('''
-        INSERT INTO supplements (
+        cursor.execute(f'''
+        INSERT INTO {TABLE_NAME} (
             product_name, category, primary_benefit, price_usd, weekly_sales, combined_text, embedding
         ) VALUES (?, ?, ?, ?, ?, ?, ?)
         ''', (

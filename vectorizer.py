@@ -97,7 +97,6 @@ try:
         if (index + 1) % 100 == 0:
             print(f"Processed {index + 1}/{len(df)} rows.")
 
-    # Lưu (commit) các thay đổi
     conn.commit()
     print("\nData processing complete. All records have been inserted into the database.")
 

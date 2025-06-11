@@ -9,7 +9,6 @@ from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
 
-# Import class đã được đổi tên từ search_engine
 from search_engine import SupplementSearchEngine
 
 app = FastAPI()
@@ -23,14 +22,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Khởi tạo search engine với class mới
 search_engine = SupplementSearchEngine()
 templates = Jinja2Templates(directory=".") # Giả sử chat.html cùng thư mục
 
 class QueryRequest(BaseModel):
     question: str
 
-# Endpoint này có thể giữ nguyên hoặc đổi tên cho rõ nghĩa
 @app.post("/search_raw")
 async def search_raw(req: QueryRequest):
     results = search_engine.search(req.question)
@@ -41,7 +38,6 @@ async def chat_ui(request: Request):
     # Trả về file chat.html
     return templates.TemplateResponse("chat.html", {"request": request})
 
-# Đổi tên endpoint cho phù hợp với dữ liệu
 @app.get("/supplements", response_class=JSONResponse)
 async def get_supplements(request: Request, query: str):
     data = search_engine.search_with_llm(query)

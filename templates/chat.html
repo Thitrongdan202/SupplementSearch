@@ -103,7 +103,6 @@
                             supplements.forEach(supp => {
                                 const card = document.createElement('div');
                                 card.className = 'supplement-card';
-                                // Cập nhật để hiển thị đúng thông tin mới
                                 card.innerHTML = `
                                     <div class="supp-header">${supp.product_name}</div>
                                     <div class="supp-details">
@@ -115,12 +114,12 @@
                                         <div class="detail-item">
                                             ${icons.price}
                                             <span class="detail-label">Giá</span>
-                                            <span class="detail-value price">$${supp.price ? supp.price.toFixed(2) : 'N/A'}</span>
+                                            <span class="detail-value price">$${supp.price != null ? supp.price.toFixed(2) : 'N/A'}</span>
                                         </div>
                                         <div class="detail-item">
                                             ${icons.sales}
                                             <span class="detail-label">Số lượng đã bán</span>
-                                            <span class="detail-value">${supp.units_sold || 'N/A'}</span>
+                                            <span class="detail-value">${supp.units_sold != null ? supp.units_sold : 'N/A'}</span>
                                         </div>
                                     </div>`;
                                 resultsContainer.appendChild(card);

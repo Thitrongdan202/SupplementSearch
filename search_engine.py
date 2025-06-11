@@ -1,11 +1,14 @@
+
 import sqlite3
 import numpy as np
 import pickle
 from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
-from gemini_helper import parse_query_dimensions
 from collections import Counter
 import re
+
+# Bỏ import gemini_helper vì chúng ta sẽ gọi nó từ main.py
+# để giữ cho search engine độc lập
 
 DB_PATH = 'supplements.db'
 TABLE_NAME = 'supplements'
@@ -34,8 +37,10 @@ class SupplementSearchEngine:
         top_indices = similarities.argsort()[-top_k:][::-1]
         top_ids = [self.data_ids[idx] for idx in top_indices]
 
+        if not top_ids:
+            return []
+
         placeholders = ','.join('?' for _ in top_ids)
-        # Cập nhật để lấy các cột mới từ DB
         self.cursor.execute(f"""
             SELECT id, product_name, category, price, units_sold
             FROM {TABLE_NAME}
@@ -47,7 +52,6 @@ class SupplementSearchEngine:
         for _id in top_ids:
             row = id_to_row.get(_id)
             if row:
-                # Cập nhật để trả về đúng dữ liệu
                 results.append({
                     "id": row[0],
                     "product_name": row[1],
@@ -59,16 +63,11 @@ class SupplementSearchEngine:
 
     def recommend_keywords(self, query: str, num_keywords: int = 5) -> list[str]:
         results = self.search(query, top_k=20)
-        # Thay thế "primary_benefit" bằng "category" để gợi ý từ khóa
+        if not results:
+            return []
+
         text = " ".join([r.get("category", "") or "" for r in results])
         tokens = re.findall(r"[A-Za-z]+", text.lower())
         stopwords = {"and", "or", "of", "the", "to", "with", "for", "in", "a", "an", "is"}
         freq = Counter(t for t in tokens if t not in stopwords and len(t) > 2)
         return [word for word, _ in freq.most_common(num_keywords)]
-
-    def search_with_llm(self, question, top_k=6):
-        parsed_query = parse_query_dimensions(question)
-        print(f"🔍 Parsed Query: {parsed_query}")
-        results = self.search(parsed_query, top_k)
-        print(f"🔍 Search Results: {results}")
-        return results

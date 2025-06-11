@@ -26,7 +26,6 @@ except Exception as e:
 
 try:
     print(f"Creating '{TABLE_NAME}' table...")
-    # Cập nhật cấu trúc bảng cho phù hợp với CSV
     cursor.execute(f'''
     CREATE TABLE IF NOT EXISTS {TABLE_NAME} (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -53,7 +52,6 @@ try:
 
     print("\nProcessing data and inserting into the database...")
     for index, row in df.iterrows():
-        # Cập nhật để tạo embedding từ các cột có sẵn
         combined_text = (
             f"Product: {row['Product Name']}. "
             f"Category: {row['Category']}. "
@@ -62,7 +60,6 @@ try:
         embedding = model.encode(combined_text)
         embedding_blob = pickle.dumps(embedding)
 
-        # Cập nhật để chèn dữ liệu từ các cột có sẵn
         cursor.execute(f'''
         INSERT INTO {TABLE_NAME} (
             product_name, category, price, units_sold, combined_text, embedding
@@ -86,7 +83,6 @@ except FileNotFoundError:
 except KeyError as e:
     print(f"\n---!!! LỖI TÊN CỘT (KeyError) !!!---")
     print(f"Không thể tìm thấy cột có tên: {e}")
-    print("Vui lòng kiểm tra lại tên cột trong file CSV và đảm bảo nó khớp chính xác với tên được sử dụng trong mã nguồn.")
 except Exception as e:
     print(f"An error occurred during data processing: {e}")
 finally:

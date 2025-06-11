@@ -4,109 +4,92 @@ import pickle
 from sentence_transformers import SentenceTransformer
 import os
 
-# --- Cấu hình ---\
-# Đường dẫn tới file cơ sở dữ liệu SQLite sẽ được tạo
 DB_PATH = 'supplements.db'
-# Đường dẫn tới file CSV chứa dữ liệu đầu vào
 CSV_PATH = 'Supplement_Sales_Weekly_Expanded.csv'
-# Tên mô hình Sentence Transformer
 MODEL_NAME = 'all-MiniLM-L6-v2'
-# Tên bảng trong cơ sở dữ liệu
 TABLE_NAME = 'supplements'
 
-# --- Xóa file DB cũ nếu tồn tại để đảm bảo dữ liệu mới hoàn toàn ---\
 if os.path.exists(DB_PATH):
     os.remove(DB_PATH)
     print(f"Removed old database file: {DB_PATH}")
 
-# --- Khởi tạo mô hình và kết nối CSDL ---\
 try:
     print(f"Loading model '{MODEL_NAME}'...")
     model = SentenceTransformer(MODEL_NAME)
     print("Model loaded successfully.")
-
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     print(f"Database connected at: {DB_PATH}")
-
 except Exception as e:
     print(f"An error occurred during initialization: {e}")
     exit()
 
-# --- Tạo bảng trong cơ sở dữ liệu ---\
 try:
     print(f"Creating '{TABLE_NAME}' table...")
-    # Tạo bảng với các cột tương ứng với file CSV và thêm cột cho text và embedding
+    # Cập nhật cấu trúc bảng cho phù hợp với CSV
     cursor.execute(f'''
     CREATE TABLE IF NOT EXISTS {TABLE_NAME} (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         product_name TEXT,
         category TEXT,
-        primary_benefit TEXT,
-        price_usd REAL,
-        weekly_sales INTEGER,
+        price REAL,
+        units_sold INTEGER,
         combined_text TEXT,
         embedding BLOB
     )
     ''')
     print("Table created successfully.")
-
 except Exception as e:
     print(f"An error occurred while creating the table: {e}")
     conn.close()
     exit()
 
-# --- Đọc và xử lý dữ liệu từ CSV ---\
 try:
     print(f"Reading data from '{CSV_PATH}'...")
     df = pd.read_csv(CSV_PATH)
+    df.columns = df.columns.str.strip()
     print("CSV data loaded successfully.")
+    print("Columns found in CSV:", df.columns.tolist())
 
     print("\nProcessing data and inserting into the database...")
-    # Lặp qua từng dòng trong DataFrame
     for index, row in df.iterrows():
-        # Kết hợp các cột văn bản để tạo ngữ cảnh tốt hơn cho embedding
+        # Cập nhật để tạo embedding từ các cột có sẵn
         combined_text = (
             f"Product: {row['Product Name']}. "
             f"Category: {row['Category']}. "
-            f"Benefit: {row['Primary Benefit']}. "
         )
 
-        # Tạo vector embedding
         embedding = model.encode(combined_text)
-
-        # Chuyển đổi embedding thành dạng BLOB để lưu trữ trong SQLite
         embedding_blob = pickle.dumps(embedding)
 
-        # Chèn dữ liệu vào bảng
+        # Cập nhật để chèn dữ liệu từ các cột có sẵn
         cursor.execute(f'''
         INSERT INTO {TABLE_NAME} (
-            product_name, category, primary_benefit, price_usd, weekly_sales, combined_text, embedding
-        ) VALUES (?, ?, ?, ?, ?, ?, ?)
+            product_name, category, price, units_sold, combined_text, embedding
+        ) VALUES (?, ?, ?, ?, ?, ?)
         ''', (
             row['Product Name'],
             row['Category'],
-            row['Primary Benefit'],
-            row['Price (USD)'],
-            row['Weekly Sales'],
+            row['Price'],
+            row['Units Sold'],
             combined_text,
             embedding_blob
         ))
 
-        # In tiến trình sau mỗi 100 dòng
         if (index + 1) % 100 == 0:
             print(f"Processed {index + 1}/{len(df)} rows.")
 
     conn.commit()
     print("\nData processing complete. All records have been inserted into the database.")
-
 except FileNotFoundError:
     print(f"Error: The file was not found at '{CSV_PATH}'")
+except KeyError as e:
+    print(f"\n---!!! LỖI TÊN CỘT (KeyError) !!!---")
+    print(f"Không thể tìm thấy cột có tên: {e}")
+    print("Vui lòng kiểm tra lại tên cột trong file CSV và đảm bảo nó khớp chính xác với tên được sử dụng trong mã nguồn.")
 except Exception as e:
     print(f"An error occurred during data processing: {e}")
-
 finally:
-    # Đóng kết nối CSDL
     if conn:
         conn.close()
         print("Database connection closed.")

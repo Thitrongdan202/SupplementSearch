@@ -1,19 +1,12 @@
-# Project: Supplement Search RAG
-# Structure:
-# - vectorizer.py: Load CSV -> Embed -> Save to SQLite
-# - search_engine.py: Query from SQLite -> Search vector
-# - main.py (api.py): FastAPI chat API
-
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
-
 from search_engine import SupplementSearchEngine
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
-# add cors
-from fastapi.middleware.cors import CORSMiddleware
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -23,7 +16,11 @@ app.add_middleware(
 )
 
 search_engine = SupplementSearchEngine()
-templates = Jinja2Templates(directory=".") # Giả sử chat.html cùng thư mục
+
+# --- SỬA Ở ĐÂY ---
+# Đổi directory="templates" thành directory="."
+# Điều này báo cho FastAPI tìm tệp chat.html ngay tại thư mục hiện tại.
+templates = Jinja2Templates(directory=".")
 
 class QueryRequest(BaseModel):
     question: str
@@ -35,13 +32,13 @@ async def search_raw(req: QueryRequest):
 
 @app.get("/", response_class=HTMLResponse)
 async def chat_ui(request: Request):
-    # Trả về file chat.html
+    # Dòng này bây giờ sẽ hoạt động chính xác
     return templates.TemplateResponse("chat.html", {"request": request})
 
 @app.get("/supplements", response_class=JSONResponse)
 async def get_supplements(request: Request, query: str):
     data = search_engine.search_with_llm(query)
-    return {"supplements": data} # Trả về dưới key 'supplements'
+    return {"supplements": data}
 
 @app.get("/recommendations", response_class=JSONResponse)
 async def recommend_keywords(request: Request, query: str):

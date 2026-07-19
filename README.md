@@ -1,6 +1,6 @@
-# Supplement Atlas
+# Supplement 
 
-Supplement Atlas là catalogue thực phẩm bổ sung dùng dữ liệu công khai, có ảnh
+Supplement là catalogue thực phẩm bổ sung dùng dữ liệu công khai, có ảnh
 thật và phân loại theo 45 nhánh. Ứng dụng hợp nhất ba nguồn trực tiếp:
 
 - **Open Food Facts**: barcode, tên, thương hiệu, taxonomy và ảnh bao bì.
